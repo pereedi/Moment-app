@@ -17,5 +17,8 @@
     "vue": "latest",
     "vue-router": "latest",
     "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "rollup": "^4.34.9"
   }
 }
