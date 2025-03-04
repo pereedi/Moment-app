@@ -1,6 +1,9 @@
 <script setup>
-import { useToast } from "vue-toastification";
+import pkg from "vue-toastification";
 import { useNuxtApp } from "#app";
+
+
+const { useToast } = pkg;
 
 const email = ref("");
 const password = ref("");

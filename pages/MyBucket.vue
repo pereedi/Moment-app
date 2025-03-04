@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification";
+import pkg from "vue-toastification";
+
+const { useToast } = pkg;
+
 
 const { $axios } = useNuxtApp();
 const toast = useToast();

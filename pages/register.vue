@@ -1,6 +1,9 @@
 <script setup>
 import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification";
+import pkg from "vue-toastification";
+
+const { useToast } = pkg;
+
 
 const router = useRouter();
 const fullname = ref("");
