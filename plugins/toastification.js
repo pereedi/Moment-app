@@ -8,4 +8,4 @@ export default defineNuxtPlugin((nuxtApp) => {
     timeout: 3000,
     position: "top-right",
   })
-})
+});

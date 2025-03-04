@@ -101,7 +101,7 @@ const handleSubmit = async (event) => {
                   name="FullName"
                   id="FullName"
                   v-model="fullname"
-                  class="block w-90 md:min-w-110 grow py-1.5 pr-3 pl-1 mt-3 mb-3 border border-gray-600 rounded-sm focus:outline-none font-display text-xs"
+                  class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
                 />
                 <p v-if="fullnameerror" class="text-red-500 text-xs ml-2">
                   {{ fullnameerror }}
@@ -114,7 +114,7 @@ const handleSubmit = async (event) => {
                   name="Email"
                   id="Email"
                   v-model="email"
-                  class="block w-90 md:min-w-110 grow py-1.5 pr-3 pl-1 mt-3 mb-3 border border-gray-600 rounded-sm focus:outline-none font-display text-xs"
+                  class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
                 />
                 <p v-if="emailerror" class="text-red-500 text-xs ml-2">
                   {{ emailerror }}
@@ -129,7 +129,7 @@ const handleSubmit = async (event) => {
                   name="Password"
                   id="Password"
                   v-model="password"
-                  class="block w-90 md:min-w-110 grow py-1.5 pr-3 pl-1 mt-3 mb-3 border border-gray-600 rounded-sm focus:outline-none font-display text-xs"
+                  class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
                 />
                 <p v-if="passworderror" class="text-red-500 text-xs ml-2">
                   {{ passworderror }}
