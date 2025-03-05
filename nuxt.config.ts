@@ -8,8 +8,14 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    
     build: {
       sourcemap: false, // Enable sourcemaps
     },
   },
+  
+  plugins: [
+    '~/plugins/toastification.js',
+    '~/plugins/axios.js'
+  ],
 })

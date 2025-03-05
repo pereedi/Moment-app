@@ -1,10 +1,9 @@
 <script setup>
-// import { ref, onMounted } from 'vue';
-// import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import pkg from "vue-toastification";
+import { useToast } from "vue-toastification"; // Correct import
 
-const { useToast } = pkg;
 
 const route = useRoute();
 const router = useRouter();
