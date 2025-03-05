@@ -1,17 +1,27 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useNuxtApp, useRoute, useRouter } from "#app";
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 import axios from 'axios';
-import { useToast } from "vue-toastification"; // Correct import
 
+const { $axios } = useNuxtApp();
 
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
 
 const date = ref('');
 const title = ref('');
 const details = ref('');
+
+const route = useRoute();
+const router = useRouter();
+
+let notyf;
+if (typeof window !== 'undefined') {
+  notyf = new Notyf(); // Initialize Notyf only on the client side
+}
+
+
+// Fetch moment details from the API
 
 const fetchMomentDetails = async () => {
   try {
@@ -28,7 +38,7 @@ const fetchMomentDetails = async () => {
     details.value = moment.details;
   } catch (error) {
     console.error('Fetch moment details error:', error.response ? error.response.data : error.message);
-    toast.error("Failed to fetch moment details! Please try again", {
+    notyf.error("Failed to fetch moment details! Please try again", {
       position: "top-right",
     });
   }
@@ -48,14 +58,14 @@ const updateMoment = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    toast.success("Moment updated successfully!", {
+    notyf.success("Moment updated successfully!", {
       position: "top-right",
     });
     router.push(`/single-moment/${route.params.id}`); // Redirect to the moment details page after update
   } catch (error) {
     console.error('Update moment error:', error.response ? error.response.data : error.message);
     console.log(error)
-    toast.error("Failed to update moment! Please try again", {
+    notyf.error("Failed to update moment! Please try again", {
       position: "top-right",
     });
   }
@@ -65,6 +75,7 @@ onMounted(() => {
   fetchMomentDetails();
 });
 </script>
+
 
 <template>
   <div>

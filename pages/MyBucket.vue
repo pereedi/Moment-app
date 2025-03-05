@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification"; // Correct import
-
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 
 const { $axios } = useNuxtApp();
-const toast = useToast();
+
+let notyf;
+if (typeof window !== 'undefined') {
+  notyf = new Notyf(); // Initialize Notyf only on the client side
+}
 
 const userName = ref("");
 const events = ref([]);
@@ -40,9 +44,11 @@ const fetchEvents = async () => {
       "Fetch events error:",
       error.response ? error.response.data : error.message
     );
-    toast.error("Failed to fetch events! Please try again", {
-      position: "top-right",
-    });
+    if (typeof window !== 'undefined') {
+      notyf.error("Failed to fetch events! Please try again", {
+        position: "top-right",
+      });
+    }
   }
 };
 
@@ -58,6 +64,7 @@ const showLess = () => {
   displayedEventsCount.value = 4;
 };
 </script>
+
 
 <template>
   <div>

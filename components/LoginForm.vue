@@ -1,18 +1,21 @@
 <script setup>
-import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification"; // Correct import
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 
-
-
-
-const email = ref("");
-const password = ref("");
-const emailerror = ref("");
-const passworderror = ref("");
+const email = ref('');
+const password = ref('');
+const emailerror = ref('');
+const passworderror = ref('');
 
 const router = useRouter();
-const toast = useToast();
 const { $axios } = useNuxtApp();
+
+let notyf;
+if (typeof window !== 'undefined') {
+  notyf = new Notyf(); // Initialize Notyf only on the client side
+}
 
 // Auto-fill user data when component loads
 onMounted(() => {
@@ -69,7 +72,7 @@ const handleSubmit = async (e) => {
     localStorage.setItem('authToken', token);
     localStorage.setItem('isAuthenticated', 'true');
 
-    toast.success("Login successful!", { position: "top-right" });
+    notyf.success("Login successful!", { position: "top-right" });
 
     // redirect to mybucket after success
     setTimeout(() => {
@@ -77,10 +80,13 @@ const handleSubmit = async (e) => {
     }, 2000);
   } catch (error) {
     console.error('Login error:', error.response ? error.response.data : error.message);
-    toast.error("Invalid email or password!", { position: "top-right" });
+    notyf.error("Invalid email or password!", { position: "top-right" });
   }
 };
 </script>
+
+
+
 
 <template>
   <div>

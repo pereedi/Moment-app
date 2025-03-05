@@ -1,19 +1,26 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useNuxtApp, useRoute, useRouter } from "#app";
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 import axios from 'axios';
-import { useToast } from "vue-toastification"; // Correct import
 
-
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
+const { $axios } = useNuxtApp();
 
 const momentTitle = ref('');
 const momentDate = ref('');
 const momentDetails = ref('');
 const momentNotFound = ref(false);
 
+const route = useRoute();
+const router = useRouter();
+
+let notyf;
+if (typeof window !== 'undefined') {
+  notyf = new Notyf(); // Initialize Notyf only on the client side
+}
+
+// Fetch moment details from the API
 const fetchMomentDetails = async () => {
   try {
     console.log('Route params:', route.params); // Debugging statement
@@ -33,11 +40,11 @@ const fetchMomentDetails = async () => {
     console.error('Fetch moment details error:', error.response ? error.response.data : error.message);
     if (error.response && error.response.status === 404) {
       momentNotFound.value = true;
-      toast.error("Moment not found for this user", {
+      notyf.error("Moment not found for this user", {
         position: "top-right",
       });
     } else {
-      toast.error("Failed to fetch moment details! Please try again", {
+      notyf.error("Failed to fetch moment details! Please try again", {
         position: "top-right",
       });
     }
@@ -52,13 +59,13 @@ const deleteMoment = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    toast.success("Moment deleted successfully!", {
+    notyf.success("Moment deleted successfully!", {
       position: "top-right",
     });
     router.push('/MyBucket'); // Redirect to MyBucket page after deletion
   } catch (error) {
     console.error('Delete moment error:', error.response ? error.response.data : error.message);
-    toast.error("Failed to delete moment! Please try again", {
+    notyf.error("Failed to delete moment! Please try again", {
       position: "top-right",
     });
   }
@@ -68,6 +75,7 @@ onMounted(() => {
   fetchMomentDetails();
 });
 </script>
+
 
 <template>
   <div>

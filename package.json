@@ -13,10 +13,10 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.6.8",
+    "notyf": "^3.10.0",
     "nuxt": "^3.10.3",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.10.4",

@@ -15,7 +15,8 @@ export default defineNuxtConfig({
   },
   
   plugins: [
-    '~/plugins/toastification.js',
-    '~/plugins/axios.js'
+    { src: '~/plugins/notyf.js', mode: 'client' },
+    '~/plugins/axios.js',
+    
   ],
 })

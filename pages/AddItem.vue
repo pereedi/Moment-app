@@ -1,18 +1,22 @@
 <script setup>
-import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification"; // Correct import
-
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 
 const { $axios } = useNuxtApp();
-const toast = useToast();
-const router = useRouter();
-
 const futureDate = ref("");
 const title = ref("");
 const details = ref("");
 const futureDateError = ref("");
 const titleError = ref("");
 const detailsError = ref("");
+const router = useRouter();
+
+let notyf;
+if (typeof window !== 'undefined') {
+  notyf = new Notyf(); // Initialize Notyf only on the client side
+}
 
 // form validation
 const validateForm = () => {
@@ -58,9 +62,11 @@ const handleSubmit = async (event) => {
           },
         }
       );
-      toast.success("Event added successfully!", {
-        position: "top-right",
-      });
+      if (typeof window !== 'undefined') {
+        notyf.success("Event added successfully!", {
+          position: "top-right",
+        });
+      }
 
       // redirect to mybucket page
       router.push("/MyBucket");
@@ -69,13 +75,24 @@ const handleSubmit = async (event) => {
         "Add item error:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Failed to add item! Please try again", {
-        position: "top-right",
-      });
+      if (typeof window !== 'undefined') {
+        if (error.response && error.response.status === 500) {
+          const errorMessage = error.response.data.detail?.message || "Internal Server Error! Please try again later.";
+          notyf.error(errorMessage, {
+            position: "top-right",
+          });
+        } else {
+          notyf.error("Failed to add item! Please try again", {
+            position: "top-right",
+          });
+        }
+      }
     }
   }
 };
 </script>
+
+
 <template>
   <div>
     <!-- Add Item -->

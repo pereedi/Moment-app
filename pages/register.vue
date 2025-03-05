@@ -1,7 +1,7 @@
 <script setup>
 import { useNuxtApp } from "#app";
-import { useToast } from "vue-toastification"; // Correct import
-
+import { Notyf } from 'notyf'; // Import Notyf
+import 'notyf/notyf.min.css'; // Import Notyf CSS
 
 const router = useRouter();
 const fullname = ref("");
@@ -10,11 +10,10 @@ const password = ref("");
 const fullnameerror = ref("");
 const emailerror = ref("");
 const passworderror = ref("");
-const isLoading = ref(false)
-
+const isLoading = ref(false);
 
 const { $axios } = useNuxtApp();
-const toast = useToast();
+const notyf = new Notyf(); // Initialize Notyf
 
 // Form validation
 const validateForm = () => {
@@ -30,86 +29,83 @@ const validateForm = () => {
   if (!email.value.includes("@")) {
     emailerror.value = "Please enter a valid email address";
     return false;
-  } else if (!email.value.includes("@")) {
-    emailerror.value = 'Email address must contain a "@" symbol';
-    return false;
-  } else {
-    emailerror.value = "";
   }
 
   if (!password.value) {
-    passworderror.value = "Please enter password";
+    passworderror.value = "Please enter your password";
     return false;
   } else if (password.value.length < 8) {
-    passworderror.value = "Password must be at least 8 characters long";
+    passworderror.value = "Password must be at least 8 characters long.";
     return false;
-  } else {
-    passworderror.value = "";
   }
 
   return true;
 };
 
-// Form submission
-const handleSubmit = async (event) => {
-  event.preventDefault();
+// Submission
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  if (validateForm()) {
-    try{
-      const response = await $axios.post('https://eventful-moments-api.onrender.com/api/v1/users/signup', {
-        fullname: fullname.value,
-        email: email.value,
-        password: password.value
-      });
+  if (!validateForm()) return;
 
-      const {token, user} = response.data
+  try {
+    const response = await $axios.post('https://eventful-moments-api.onrender.com/api/v1/users/signup', {
+      fullname: fullname.value,
+      email: email.value,
+      password: password.value,
+    });
 
-      // store auth token and user data in local storage
-      localStorage.setItem('authToken', token)
-      localStorage.setItem('isAuthenticated', true)
+    const { token, user } = response.data;
 
-      toast.success('Registration Successful! Redirecting to Login...', {position: "top-right"})
+    // store the authentication token in localstorage
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('isAuthenticated', 'true');
 
-      // redirect to login page
-      router.push('/')
-    }catch (error){
-      console.error('Registration error:', error.response ? error.response.data : error.message);
-      toast.error('Registration Failed! Please try again', {position: "top-right"})
-    } finally {
-        isLoading.value = false
-    }
+    notyf.success("Registration successful!");
+
+    // redirect to mybucket after success
+    setTimeout(() => {
+      router.push("/MyBucket");
+    }, 2000);
+  } catch (error) {
+    console.error('Registration error:', error.response ? error.response.data : error.message);
+    notyf.error("Registration failed!");
   }
 };
 </script>
+
 <template>
   <div>
     <div class="flex flex-col items-center">
-      <div class="w-96 my-5">
+      <div class="md:w-[30%] w-[85%]">
         <!-- main -->
-        <div class="mx-3 mt-15 w-110 leading-6">
-          <h1 class="font-display text-2xl font-bold">Create an account,</h1>
+        <div class="mt-15 w-100 md:w-110 leading-6 mx-5">
+          <h1 class="text-(length:--heading1) font-(--fontbold)">Welcome,</h1>
+          <p class="py-[5%]">
+            Hi, my name is Eventful Moments, I am a bucket… no, not the bucket
+            of water but I store awesome moments you will like to have in coming
+            years.
+          </p>
         </div>
         <div>
           <!-- form -->
-          <form @submit="handleSubmit" class="mt-5">
-            <div class="mx-3">
-              <div>
-                <label for="FullName" class="font-display text-xs"
-                  >Full Name</label
-                >
+          <form @submit="handleSubmit" class="mt-5 mx-5">
+            <div class="">
+              <div class="">
+                <label for="Fullname" class="font-display">Full Name</label>
                 <input
                   type="text"
-                  name="FullName"
-                  id="FullName"
+                  name="Fullname"
+                  id="Fullname"
                   v-model="fullname"
                   class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
                 />
-                <p v-if="fullnameerror" class="text-red-500 text-xs ml-2">
+                <p v-if="fullnameerror" class="text-red-500 text-xs">
                   {{ fullnameerror }}
                 </p>
               </div>
-              <div>
-                <label for="Email" class="font-display text-xs">Email</label>
+              <div class="">
+                <label for="Email" class="font-display">Email</label>
                 <input
                   type="email"
                   name="Email"
@@ -117,22 +113,20 @@ const handleSubmit = async (event) => {
                   v-model="email"
                   class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
                 />
-                <p v-if="emailerror" class="text-red-500 text-xs ml-2">
+                <p v-if="emailerror" class="text-red-500 text-xs">
                   {{ emailerror }}
                 </p>
               </div>
-              <div>
-                <label for="Password" class="font-display text-xs"
-                  >Password</label
-                >
+              <div class="">
+                <label for="Password">Password</label>
                 <input
                   type="Password"
                   name="Password"
                   id="Password"
                   v-model="password"
-                  class="w-full p-[10px] border-solid border-[1px] rounded-[7px] mb-[15px]"
+                  class="w-full p-[10px] border-solid border-[1px] rounded-[7px] focus:outline-none"
                 />
-                <p v-if="passworderror" class="text-red-500 text-xs ml-2">
+                <p v-if="passworderror" class="text-red-500 text-xs">
                   {{ passworderror }}
                 </p>
               </div>
@@ -140,8 +134,8 @@ const handleSubmit = async (event) => {
                 <button
                   type="submit"
                   class="bg-[#5271FF] p-3 rounded-sm w-30 mt-5 text-white font-display text-sm font-bold align-center text-center  hover:bg-black"
-                  >
-                Sign Up
+                >
+                  Register
                 </button>
               </div>
             </div>
