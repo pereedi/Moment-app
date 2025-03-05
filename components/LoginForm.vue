@@ -91,12 +91,13 @@ const handleSubmit = async (e) => {
 <template>
   <div>
     <div class="flex flex-col items-center">
-      <div class="md:w-[30%] w-[85%]">
+      <div class="md:w-[30%] w-[80%]">
         <!-- main -->
         <div class="mt-15 w-100 md:w-110 leading-6 mx-5">
           <h1 class="text-(length:--heading1) font-(--fontbold)">Welcome back,</h1>
           <p class="py-[5%]">
-            Hi, my name is Eventful Moments, I am a bucket… no, not the bucket
+            Hi, my name is Eventful Moments, I am a bucket… no, <br>
+             not the bucket
             of water but I store awesome moments you will like to have in coming
             years.
           </p>
